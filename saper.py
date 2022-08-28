@@ -7,6 +7,8 @@ bombs_x = []
 bombs_y = []
 print(" * - hidden field \n 1-9 information about quantity of bombs around \n . - empty field(no bombs around)")
 while 1:
+    #menu start 
+
     while 1:
         try:
             print("Podaj parametr wielkości kwadratu gry (min 5, max 25):")
@@ -24,6 +26,7 @@ while 1:
         print("zła ilośc min")
 
     else:
+        #mines generator
         bombs_y.append(random.randint(0, size - 1))
         bombs_x.append(random.randint(0, size - 1))
 
@@ -42,8 +45,10 @@ while 1:
             
         break
 
+#visible area generator
 visible_table = [["*" for x in range(size)] for y in range(size)]
 
+#recursion function that counts bombs around a field
 def show_block(x,y):
 
     count = 0
@@ -84,6 +89,7 @@ def show_block(x,y):
     if count == 0:
         option(x,y)
 
+#function that selects fields around a shoot
 def option(x,y):
     if x > 0 and y > 0 and visible_table[y-1][x-1] == "*" :
         show_block(x-1,y-1)
@@ -101,8 +107,10 @@ def option(x,y):
         show_block(x-1,y)
     if x < size -1 and visible_table[y][x+1] == "*":
         show_block(x+1,y)
-    
+
+#main loop
 while 1:
+    #drawing a board
     axis_x = "    "
     for x in range(0,size):
         if  x < 10:
@@ -127,7 +135,9 @@ while 1:
         print('',end="\n")
     print("Y")
     while 1:
+        #if statement for winning conditions
         if sum(x.count('*') for x in visible_table) != mines_quantity:
+            #pick menu
             while 1:
                 try:
                     x_shot = int(input("Podaj X zaznaczenia: ")) 
