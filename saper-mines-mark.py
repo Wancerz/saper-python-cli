@@ -1,6 +1,7 @@
 import random
 import sys
 from tkinter import E
+import os
 
 sys.setrecursionlimit(2000)
 bombs_x = []
@@ -10,19 +11,19 @@ while 1:
     #menu start 
     while 1:
         try:
-            print("Podaj parametr wielkości kwadratu gry (min 5, max 25):")
+            print("Enter the size of the playing field (min 5, max 25):")
             size = int(input())
-            print("podaj ilość min, maksymalna ilosc:",size*size -1)
+            print("Enter the number of mines, the maximum quantity:",size*size -1)
             mines_quantity = int(input())
             break
         except:
-            print("podana wartość nie jest liczbą")
+            print("The given value is not a number")
     
     if size not in range (5,26):
-        print("Za mała/duża wartość")
+        print("Size value too low/high")
 
     elif mines_quantity not in range (1,size*size):
-        print("zła ilośc min")
+        print("Bad quantity of mines")
 
     else:
         #mines generator
@@ -143,31 +144,35 @@ while 1:
                     print("Reveal field/Mark bomb(1/2)")
                     pick_mode = int(input())
                     if pick_mode in range(1,3): 
-                        x_shot = int(input("Podaj X zaznaczenia: ")) 
-                        y_shot = int(input("Podaj Y zaznaczenia: "))
+                        x_shot = int(input("Enter a coordinate of X: ")) 
+                        y_shot = int(input("Enter a coordinate of Y: "))
                         break
                     else:
-                        print("zły wybór")
+                        print("wrong choice")
                 except:
-                    print("podana wartość nie jest liczbą")
+                    print("The given value is not a number")
 
 
             if (x_shot and y_shot) in range(0,size):
                 if  visible_table[y_shot][x_shot] == "*" or visible_table[y_shot][x_shot] == "B":
                     break
                 else: 
-                    print("Pole jest już odsłonięte, wybierz poprawne ")
+                    print("The field is exposed, select the correct one")
             else:
-                print("koordynaty poza planszą")
+                print("Coordinates outside the board")
         else:
-            sys.exit("Wygrałeś w grę")
+            print("You won")
+            os.system ('pause')
+            sys.exit()
     
     #field changing 
     if pick_mode == 1:
         for i,_ in enumerate(bombs_x):
             
             if bombs_x[i] == x_shot and bombs_y[i] == y_shot:
-                sys.exit("Przegrałeś w gre")
+                print("You lose")
+                os.system('pause')
+                sys.exit()
             else:
                 show_block(x_shot,y_shot)
                 option(x_shot,y_shot)
