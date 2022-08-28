@@ -2,6 +2,8 @@ import random
 import sys
 from tkinter import E
 import os
+from colorama import Fore, Back, Style
+
 
 sys.setrecursionlimit(2000)
 bombs_x = []
@@ -9,21 +11,20 @@ bombs_y = []
 print(" * - hidden field \n 1-9 information about quantity of bombs around \n . - empty field(no bombs around)")
 while 1:
     #menu start 
-
     while 1:
         try:
             print("Enter the size of the playing field (min 5, max 25):")
             size = int(input())
-            print("Enter the number of mines, the maximum quantity:",size*size -1)
-            mines_quantity = int(input())
-            break
+            if size not in range (5,26):
+                print("Size value too low/high")
+            else:
+                print("Enter the number of mines, the maximum quantity:",size*size -1)
+                mines_quantity = int(input())
+                break
         except:
             print("The given value is not a number")
     
-    if size not in range (5,26):
-        print("Size value too low/high")
-
-    elif mines_quantity not in range (1,size*size):
+    if mines_quantity not in range (1,size*size):
         print("Bad quantity of mines")
 
     else:
@@ -42,8 +43,7 @@ while 1:
             if assignment == 0:
                 bombs_x.append(bomb_x_temp)
                 bombs_y.append(bomb_y_temp)
-            assignment = 0
-            
+            assignment = 0     
         break
 
 #visible area generator
@@ -112,29 +112,47 @@ def option(x,y):
 #main loop
 while 1:
     #drawing a board
-    axis_x = "    "
+    axis_x = "   "
     for x in range(0,size):
         if  x < 10:
             axis_x = axis_x + str(x) + "  " 
         else:
             axis_x = axis_x + str(x)+ " "
     axis_x = axis_x + " X"
-    print(axis_x)
+    print(Fore.CYAN + axis_x + Fore.RESET)
     axis_y = 0
     for x in range (len(visible_table)):
         if axis_y <10:
-           print(axis_y," |", end= '')
+           print(Fore.CYAN + str(axis_y) + Fore.RESET +" |", end= '')
         else:
-            print(axis_y,"|", end= '')
+            print(Fore.CYAN + str(axis_y) + Fore.RESET +"|", end= '')
         axis_y += 1
 
         for y in range (len(visible_table)):
             if visible_table[x][y] == "*":
                 print("*  ", end='')
             else:
-                print(visible_table[x][y]+"  ", end='')
+                if visible_table[x][y] == ".":
+                    print(visible_table[x][y]+"  ", end='')
+                elif visible_table[x][y] == "1":
+                    print(Fore.BLUE + visible_table[x][y]+"  " + Fore.RESET, end='')
+                elif visible_table[x][y] == "2":
+                    print(Fore.GREEN + visible_table[x][y]+"  " + Fore.RESET, end='')
+                elif visible_table[x][y] == "3":
+                    print(Fore.RED + visible_table[x][y]+"  " + Fore.RESET, end='')
+                elif visible_table[x][y] == "4":
+                    print(Style.DIM + Fore.BLUE + visible_table[x][y]+"  " + Fore.RESET + Style.RESET_ALL, end='')
+                elif visible_table[x][y] == "5":
+                    print(Style.DIM + Fore.RED + visible_table[x][y]+"  " + Fore.RESET + Style.RESET_ALL, end='')
+                elif visible_table[x][y] == "6":
+                    print(Fore.MAGENTA + visible_table[x][y]+"  " + Fore.RESET, end='')
+                elif visible_table[x][y] == "7":
+                    print(Fore.CYAN + visible_table[x][y]+"  " + Fore.RESET, end='')
+                elif visible_table[x][y] == "8":
+
+                    print(visible_table[x][y]+"  ", end='')
         print('',end="\n")
-    print("Y")
+    print(Fore.CYAN + "Y" + Fore.RESET)
     while 1:
         #if statement for winning conditions
         if sum(x.count('*') for x in visible_table) != mines_quantity:
